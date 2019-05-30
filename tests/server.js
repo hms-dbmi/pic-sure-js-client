@@ -57,11 +57,12 @@ app.use((req, res, next) => {
                     if (typeof(temp.endpoint) !== 'undefined') {
                         temp.endpoint = temp.endpoint.trim();
                         if (temp.endpoint.endsWith('/')) {
-                            configuration.endpoint = temp.endpoint + '/';
-                        } else {
                             configuration.endpoint = temp.endpoint;
+                        } else {
+                            configuration.endpoint = temp.endpoint + '/';
                         }
                     }
+                    configuration.proxy = "http://" +req.headers.host + "/~proxy"
                     if (typeof(temp.token) !== 'undefined') configuration.token = temp.token;
                     // reinitialize the proxy component
                     relayProxy = proxy("/~proxy", {

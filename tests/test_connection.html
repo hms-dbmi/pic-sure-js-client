@@ -35,11 +35,18 @@
 
     </form>
     <script type="syntaxhighlighter" class="brush: js"><![CDATA[
-      temp_PicSure_Endpoint = "your_saved_endpoint_url";
-      temp_PicSure_Token = "your_saved_security_token";
+      temp_PicSure_Endpoint = "<this had already been set in the console>";
+      temp_PicSure_Token = "<this had already been set in the console>";
+
+      PicSureClient = require('PIC-SURE_Connector');
+      connection = PicSureClient.connect(temp_PicSure_Endpoint, temp_PicSure_Token);
+      connection.list();
+
     ]]></script>
 
     <script type="text/javascript">
+        require(['PIC-SURE_Connector']);
+
         jQuery(document).ready(function() {
             console.warn("execute");
             SyntaxHighlighter.all();
