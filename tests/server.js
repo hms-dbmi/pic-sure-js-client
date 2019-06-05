@@ -84,6 +84,7 @@ app.use(serveStatic(__dirname));
 // also serve static content from 'js' subdirectories
 app.use(serveStatic(path.normalize(__dirname + "//..//js//lib//")));
 app.use(serveStatic(path.normalize(__dirname + "//..//js//src//")));
+app.use(serveStatic(path.normalize(__dirname + "//..//js//src-adapters//")));
 
 
 // start server

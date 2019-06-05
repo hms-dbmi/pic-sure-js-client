@@ -109,20 +109,20 @@ define([], function(PicSureConnector) {
         }
         info(resource_uuid){
             // ### https://github.com/hms-dbmi/pic-sure/blob/master/pic-sure-resources/pic-sure-resource-api/src/main/java/edu/harvard/dbmi/avillach/service/ResourceWebClient.java#L43
-            let url = this.url + "info/" + String(resource_uuid)
+            const url = this.url + "info/" + String(resource_uuid)
             return (new Promise((resolve, reject) => {
                 jQuery.ajax({
                     method: "POST",
                     contentType: "application/json",
                     url: url,
                     data: "{}",
+                    dataType: "text",
                     beforeSend: (xhr) => {
                         xhr.setRequestHeader("Authorization", "Bearer "+this.token);
                     }
                 }).done((data, textStatus, jqXHR) => {
-                    let ret = JSON.stringify(data);
-                    resolve(ret);
-                    return ret;
+                    resolve(data);
+                    return data;
                 }).fail((jqXHR, textStatus, errorThrown) => {
                     let ret = "[]";
                     reject(ret);
@@ -130,14 +130,59 @@ define([], function(PicSureConnector) {
                 });
             }));
         }
-        search(resource_uuid, query) {
+        search(resource_uuid, query = false) {
             // make sure a Resource UUID is passed via the body of these commands
             // ### https://github.com/hms-dbmi/pic-sure/blob/master/pic-sure-resources/pic-sure-resource-api/src/main/java/edu/harvard/dbmi/avillach/service/ResourceWebClient.java#L69
+            const url = this.url + "search/" + String(resource_uuid);
+            if (query === false) {
+                const query_data = {"query":""};
+            } else {
+                const query_data = String(query);
+            }
+
+            return (new Promise((resolve, reject) => {
+                jQuery.ajax({
+                    method: "POST",
+                    contentType: "application/json",
+                    url: url,
+                    data: query_data,
+                    dataType: "text",
+                    beforeSend: (xhr) => {
+                        xhr.setRequestHeader("Authorization", "Bearer "+this.token);
+                    }
+                }).done((data, textStatus, jqXHR) => {
+                    resolve(data);
+                    return data;
+                }).fail((jqXHR, textStatus, errorThrown) => {
+                    let ret = '{"results":{}, "error":"true"}';
+                    reject(ret);
+                    return ret;
+                });
+            }));
         }
         syncQuery(resource_uuid, query) {
             // make sure a Resource UUID is passed via the body of these commands
             // ### https://github.com/hms-dbmi/pic-sure/blob/master/pic-sure-resources/pic-sure-resource-api/src/main/java/edu/harvard/dbmi/avillach/service/ResourceWebClient.java#L186
-
+            const url = this.url + "query/sync";
+            return (new Promise((resolve, reject) => {
+                jQuery.ajax({
+                    method: "POST",
+                    contentType: "application/json",
+                    url: url,
+                    data: String(query),
+                    dataType: "text",
+                    beforeSend: (xhr) => {
+                        xhr.setRequestHeader("Authorization", "Bearer "+this.token);
+                    }
+                }).done((data, textStatus, jqXHR) => {
+                    resolve(data);
+                    return data;
+                }).fail((jqXHR, textStatus, errorThrown) => {
+                    let ret = '{"results":{}, "error":"true"}';
+                    reject(ret);
+                    return ret;
+                });
+            }));
         }
         asyncQuery(resource_uuid, query) {
             // make sure a Resource UUID is passed via the body of these commands

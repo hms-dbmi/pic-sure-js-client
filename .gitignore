@@ -47,3 +47,6 @@ Thumbs.db
 /js/coverage/
 /node_modules/
 /.idea/
+
+# Symbolic linked adapter libraries
+/src-adapters/
