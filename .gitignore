@@ -50,3 +50,6 @@ Thumbs.db
 
 # Symbolic linked adapter libraries
 /src-adapters/
+
+# Merge tool backups
+*.bak
