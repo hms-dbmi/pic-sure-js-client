@@ -81,10 +81,10 @@ app.use((req, res, next) => {
 
 // serve static content from tests directory
 app.use(serveStatic(__dirname));
-// also serve static content from 'js' subdirectories
-app.use(serveStatic(path.normalize(__dirname + "//..//js//lib//")));
-app.use(serveStatic(path.normalize(__dirname + "//..//js//src//")));
-app.use(serveStatic(path.normalize(__dirname + "//..//js//src-adapters//")));
+// also serve static content from 'src' subdirectories
+app.use(serveStatic(path.normalize(__dirname + "//..//src//lib//")));
+app.use(serveStatic(path.normalize(__dirname + "//..//src//Connector//")));
+app.use(serveStatic(path.normalize(__dirname + "//..//src//Connector-adapters//")));
 
 
 // start server

@@ -1,7 +1,7 @@
 /**
  * Created by nbeni on 5/17/2019.
  */
-define([], function(PicSureConnector) {
+define([], function() {
 
     let _PicSureApiVersion = "0.1.0";
     let Connection = class {
