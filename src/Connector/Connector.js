@@ -1,10 +1,14 @@
-/**
- * Created by nbeni on 5/17/2019.
- */
+// For eslint stuff
+//let define = (define == undefined ? undefined : define);
+//if (define == undefined) console.error("define function from RequireJS is not defined! RequireJS is not loaded");
+//
+//let jQuery  = (jQuery == undefined ? undefined : jQuery);
+//if (jQuery == undefined) console.error("jQuery is not defined! jQuery is not loaded");
+// ========================================================================================
 define([], function() {
-
-    let _PicSureApiVersion = "0.1.0";
-    let Connection = class {
+    let PicSureApiVersion = "0.1.0";
+    let Connection;
+    Connection = class {
         constructor(arg_url, arg_token) {
             let endpoint = String(arg_url).trim();
             if (endpoint.endsWith("/") === false) {
@@ -13,6 +17,7 @@ define([], function() {
             this.url = endpoint;
             this.token = arg_token;
         }
+
         help() {
             console.log(`
         [HELP] PicSureClient.connect(url, token)
@@ -33,14 +38,15 @@ define([], function() {
               a specific type which has its own adapter library.  Libraries will
               follow the naming convention: "PicSureXyzLib" where "Xyz" 
               specifies the adapter's storage format.
-            `)
+            `);
         }
+
         about(resourceId) {
             let url = this.url + "info/";
             if (typeof(resourceId) === "undefined") {
-                url = url + "resources"
+                url = url + "resources";
             } else {
-                url = url + String(resourceId)
+                url = url + String(resourceId);
             }
 
             return (new Promise((resolve, reject) => {
@@ -48,42 +54,49 @@ define([], function() {
                     method: "GET",
                     url: url,
                     beforeSend: (xhr) => {
-                        xhr.setRequestHeader("Authorization", "Bearer "+this.token);
+                        xhr.setRequestHeader("Authorization", "Bearer " + this.token);
                     }
                 }).done((data, textStatus, jqXHR) => {
-                    let ret = {"error":false, "headers":jqXHR.getAllResponseHeaders().split("\n"), "content":data};
+                    let ret = {"error": false, "headers": jqXHR.getAllResponseHeaders().split("\n"), "content": data};
                     resolve(JSON.stringify(ret));
                     return JSON.stringify(ret);
                 }).fail((jqXHR, textStatus, errorThrown) => {
-                    let ret = {"error":true, "headers":jqXHR.getAllResponseHeaders().split("\n"), "content":errorThrown};
+                    let ret = {
+                        "error": true,
+                        "headers": jqXHR.getAllResponseHeaders().split("\n"),
+                        "content": errorThrown
+                    };
                     reject(JSON.stringify(ret));
                     return JSON.stringify(ret);
                 });
             }));
         }
+
         async list() {
             let listing = await this.getResources();
             listing = JSON.parse(listing);
 
-            console.group()
-            console.warn("Listing for resources at "+this.url+":");
+            console.group();
+            console.warn("Listing for resources at " + this.url + ":");
             listing.forEach((rec) => {
                 console.dirxml(rec);
             });
             console.groupEnd();
         }
+
         getInfo() {
             return false;
         }
+
         getResources() {
-            let url = this.url + "info/resources"
+            let url = this.url + "info/resources";
             return (new Promise((resolve, reject) => {
                 jQuery.ajax({
                     method: "GET",
                     dataType: "text",
                     url: url,
                     beforeSend: (xhr) => {
-                        xhr.setRequestHeader("Authorization", "Bearer "+this.token);
+                        xhr.setRequestHeader("Authorization", "Bearer " + this.token);
                     }
                 }).done((data, textStatus, jqXHR) => {
                     resolve(data);
@@ -95,6 +108,7 @@ define([], function() {
                 });
             }));
         }
+
         _api_obj() {
             return new PicSureConnectionAPI(this.url, this.token);
         }
@@ -108,7 +122,7 @@ define([], function() {
         }
         info(resource_uuid){
             // ### https://github.com/hms-dbmi/pic-sure/blob/master/pic-sure-resources/pic-sure-resource-api/src/main/java/edu/harvard/dbmi/avillach/service/ResourceWebClient.java#L43
-            const url = this.url + "info/" + String(resource_uuid)
+            const url = this.url + "info/" + String(resource_uuid);
             return (new Promise((resolve, reject) => {
                 jQuery.ajax({
                     method: "POST",
@@ -133,10 +147,11 @@ define([], function() {
             // make sure a Resource UUID is passed via the body of these commands
             // ### https://github.com/hms-dbmi/pic-sure/blob/master/pic-sure-resources/pic-sure-resource-api/src/main/java/edu/harvard/dbmi/avillach/service/ResourceWebClient.java#L69
             const url = this.url + "search/" + String(resource_uuid);
+            let query_data;
             if (query === false) {
-                var query_data = {"query":""};
+                query_data = {"query":""};
             } else {
-                var query_data = String(query);
+                query_data = String(query);
             }
 
             return (new Promise((resolve, reject) => {
@@ -153,7 +168,7 @@ define([], function() {
                     resolve(data);
                     return data;
                 }).fail((jqXHR, textStatus, errorThrown) => {
-                    let ret = '{"results":{}, "error":"true"}';
+                    let ret = "{\"results\":{}, \"error\":\"true\"}";
                     reject(ret);
                     return ret;
                 });
@@ -177,7 +192,7 @@ define([], function() {
                     resolve(data);
                     return data;
                 }).fail((jqXHR, textStatus, errorThrown) => {
-                    let ret = '{"results":{}, "error":"true"}';
+                    let ret = "{\"results\":{}, \"error\":\"true\"}";
                     reject(ret);
                     return ret;
                 });
@@ -202,7 +217,7 @@ define([], function() {
     // below this line is for the returned "PicSure.Client" class
     // --------------------------------------------------------------------------------------------------------------
     let _version = () => {
-        console.log("PicSureClient Javascript Library (version " + _PicSureApiVersion + ")");
+        console.log("PicSureClient Javascript Library (version " + PicSureApiVersion + ")");
     };
 
     let _help = () => {

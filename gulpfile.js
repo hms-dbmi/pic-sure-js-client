@@ -1,12 +1,31 @@
-const Server = require('karma').Server;
-const { series, parallel } = require('gulp');
+"use strict";
+
+const gulp = require("gulp");
+const { series, parallel } = require("gulp");
+const plumber = require("gulp-plumber");
+const del = require("del");
+const eslint = require("gulp-eslint");
+
+// const uglify = require("gulp-uglify");
+const rename = require("gulp-rename");
+
+//const sourcemaps = require("gulp-sourcemaps");
+//const transpile  = require('gulp-es6-module-transpiler');
+
+// const webpack = require("webpack");
+// const webpackconfig = require("./webpack.config.js");
+// const webpackstream = require("webpack-stream");
+
+const Server = require("karma").Server;
+
+
 
 /**
  * Run test once and exit
  */
 function test(cb) {
     new Server({
-        configFile: __dirname + '/karma.conf.js',
+        configFile: __dirname + "/karma.conf.js",
         singleRun: true
     }, cb).start();
 }
@@ -16,42 +35,100 @@ function test(cb) {
  */
 function tdd(cb) {
     new Server({
-        configFile: __dirname + '/karma.conf.js'
+        configFile: __dirname + "/karma.conf.js"
     }, cb).start();
 }
 
 
-function clean(cb) {
-    // body omitted
-    cb();
+function clean() {
+    return del(["./dist/*"]);
 }
 
-function jsTranspile(cb) {
-    // body omitted
-    cb();
+
+// Lint scripts
+function scriptsLint() {
+    return gulp
+        .src(["./src/**/*.js", "./gulpfile.js"])
+        .pipe(plumber())
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 }
 
-function jsBundle(cb) {
-    // body omitted
-    cb();
+// Transpile, concatenate and minify scripts
+function scripts() {
+    // return (
+    //     gulp
+    //         .src(["./src/**/*.js"])
+    //         .pipe(plumber())
+    //         .pipe(webpackstream(webpackconfig, webpack))
+    //         // folder only, filename is specified in webpack config
+    //         .pipe(gulp.dest("./dist/PIC-SURE/"))
+    // );
 }
 
-function jsMinify(cb) {
-    // body omitted
-    cb();
+// function jsTranspile() {
+//     return (
+//         gulp
+//             .src(["./lib/**", "./src/**/*.js"])
+//             .pipe(sourcemaps.init())
+//             .pipe(transpile({
+//                 formatter: "bundle"
+//             }))
+//             .pipe(sourcemaps.write("./dist"))
+//             .pipe(gulp.dest("./dist"))
+//     );
+// }
+
+
+function jsGetDep_requirejs() {
+    return (
+        gulp
+            .src(["./node_modules/requirejs/require.js"])
+            .pipe(gulp.dest("./dist/lib/RequireJS"))
+    );
 }
 
-function publish(cb) {
-    // body omitted
-    cb();
+
+function jsGetDep_jquery() {
+    return (
+        gulp
+            .src(["./node_modules/jquery/dist/*"])
+            .pipe(gulp.dest("./dist/lib/jQuery"))
+    );
 }
+
+function jsBuildLibrary() {
+    return (
+        gulp
+            .src(["./src/**/*.js"])
+//            .pipe(uglify())
+            .pipe(rename(
+                (path) => {
+                    return {
+                        dirname: "",
+                        basename: path.basename,
+                        extname: ".js"
+                    };
+                }
+            ))
+            .pipe(gulp.dest("./dist/PIC-SURE/"))
+    );
+
+}
+
 
 exports.build = series(
-    test,
     clean,
-    series(jsTranspile, jsBundle),
-    jsMinify,
-    publish
+    series(scriptsLint, jsBuildLibrary),
+    parallel(jsGetDep_jquery, jsGetDep_requirejs),
 );
 
-exports.default = tdd
+const myjs = gulp.series(scriptsLint, scripts);
+
+
+exports.clean = clean;
+exports.default = tdd;
+exports.scripts = myjs;
+exports.dependentscripts = gulp.parallel(jsGetDep_jquery, jsGetDep_requirejs);
+exports.test = test;
