@@ -10,18 +10,27 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'requirejs'],
+    frameworks: ["jasmine-jquery", "jasmine-ajax", "jasmine", "requirejs"],
 
 
     // list of files / patterns to load in the browser
     files: [
-        {pattern: 'lib/*.js', included: true},
+        {pattern: 'dist/lib/**/*.js', included: true},
         {pattern: 'src/Connector/*.js', included: false},
         {pattern: 'test/tests/*.js', included: false},
         'test/test-main.js'
     ],
 
+      // list of files / patterns to exclude
+      exclude: [
+          'dist/lib/RequireJS/*.js',
+          'dist/lib/jQuery/*.js'
+      ],
+
+
     plugins: [
+        require('karma-jasmine-ajax'),
+        require('karma-jasmine-jquery'),
         require('karma-jasmine'),
         require('karma-requirejs'),
         require('karma-chrome-launcher'),
@@ -34,11 +43,6 @@ module.exports = function(config) {
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-
-    // list of files / patterns to exclude
-    exclude: [
-    ],
-
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor

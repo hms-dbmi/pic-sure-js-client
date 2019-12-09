@@ -15,7 +15,8 @@ require.config({
 
     // example of using a couple of path translations (paths), to allow us to refer to different library dependencies, without using relative paths
     paths: {
-        'PicSure': 'src'
+        'PicSure': 'src',
+
     },
 
     // example of using a shim, to load non AMD libraries (such as underscore)
