@@ -56,29 +56,8 @@ function scriptsLint() {
 }
 
 // Transpile, concatenate and minify scripts
-function scripts() {
-    // return (
-    //     gulp
-    //         .src(["./src/**/*.js"])
-    //         .pipe(plumber())
-    //         .pipe(webpackstream(webpackconfig, webpack))
-    //         // folder only, filename is specified in webpack config
-    //         .pipe(gulp.dest("./dist/PIC-SURE/"))
-    // );
-}
+function scripts(cb) { cb(); }
 
-// function jsTranspile() {
-//     return (
-//         gulp
-//             .src(["./lib/**", "./src/**/*.js"])
-//             .pipe(sourcemaps.init())
-//             .pipe(transpile({
-//                 formatter: "bundle"
-//             }))
-//             .pipe(sourcemaps.write("./dist"))
-//             .pipe(gulp.dest("./dist"))
-//     );
-// }
 
 
 function jsGetDep_requirejs() {
