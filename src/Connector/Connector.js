@@ -201,15 +201,17 @@ define([], function() {
         asyncQuery(resource_uuid, query) {
             // make sure a Resource UUID is passed via the body of these commands
             // ### https://github.com/hms-dbmi/pic-sure/blob/master/pic-sure-resources/pic-sure-resource-api/src/main/java/edu/harvard/dbmi/avillach/service/ResourceWebClient.java#L98
+            throw Error("NOT YET IMPLEMENTED!");
         }
         queryStatus(resource_uuid, query_uuid) {
             // make sure a Resource UUID is passed via the body of these commands
             // ### https://github.com/hms-dbmi/pic-sure/blob/master/pic-sure-resources/pic-sure-resource-api/src/main/java/edu/harvard/dbmi/avillach/service/ResourceWebClient.java#L124
-
-                }
+            throw Error("NOT YET IMPLEMENTED!");
+        }
         queryResult(resource_uuid, query_uuid) {
             // make sure a Resource UUID is passed via the body of these commands
             // ### https://github.com/hms-dbmi/pic-sure/blob/master/pic-sure-resources/pic-sure-resource-api/src/main/java/edu/harvard/dbmi/avillach/service/ResourceWebClient.java#L155
+            throw Error("NOT YET IMPLEMENTED!");
         }
     };
 

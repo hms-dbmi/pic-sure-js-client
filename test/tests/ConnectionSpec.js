@@ -2,7 +2,7 @@
  * Created by nbenik on 12/2/2019.
  */
 
-describe("Test connection library creation (via RequireJS)", () => {
+describe("[Client library creation (via RequireJS)]", () => {
     it("Can be created by nested include", (done) => {
         requirejs(["PicSure/Connector/Connector"], function(PicSureClient) {
             expect(typeof PicSureClient).not.toBe(undefined);
@@ -38,7 +38,7 @@ describe("Test connection object creation", () => {
 });
 
 
-describe("Test connection object functions", () => {
+describe("[Connection object functions]", () => {
     // setup AJAX mocking
     beforeEach(function() {
         jasmine.Ajax.install();
@@ -97,7 +97,7 @@ describe("Test connection object functions", () => {
         requirejs(["PicSure/Connector/Connector"], function() {
             let test_url = "http://some.url/PIC-SURE/";
             let test_token = "some_jwt_token";
-            let test_uuid = "0000-0000-0000-0000"
+            let test_uuid = "0000-0000-0000-0000";
             let PicSureClient = require('PicSure/Connector/Connector');
             let conn = PicSureClient.connect(test_url, test_token);
             expect(typeof conn.about).toBe("function");
